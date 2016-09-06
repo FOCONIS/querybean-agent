@@ -13,6 +13,7 @@ public class EnhanceContext {
 	private final IgnoreClassHelper ignoreClassHelper;
 
 	private final DetectQueryBean detectQueryBean;
+	private final DetectDescriptorBean detectDescriptorBean;
 
 	private PrintStream logout;
 
@@ -22,50 +23,63 @@ public class EnhanceContext {
 	 * Construct a context for enhancement.
 	 */
 	public EnhanceContext(String agentArgs, ClassLoader classLoader, Set<String> initialPackages) {
+		this.logout = System.out;
+		
+		this.detectQueryBean = Distill.convert(AgentManifestReader.read(classLoader, initialPackages));
+		this.detectDescriptorBean = new DetectDescriptorBean(detectQueryBean.getPackages());
 
-    this.logout = System.out;
+		if (detectQueryBean.isEmpty()) {
+			System.err.println("---------------------------------------------------------------------------------------------");
+			System.err.println("QueryBean Agent: No packages containing query beans - Missing ebean.mf files? this won't work.");
+			System.err.println("---------------------------------------------------------------------------------------------");
+		}
 
-    this.detectQueryBean = Distill.convert(AgentManifestReader.read(classLoader, initialPackages));
-    if (detectQueryBean.isEmpty()) {
-      System.err.println("---------------------------------------------------------------------------------------------");
-      System.err.println("QueryBean Agent: No packages containing query beans - Missing ebean.mf files? this won't work.");
-      System.err.println("---------------------------------------------------------------------------------------------");
-    }
+		HashMap<String, String> agentArgsMap = ArgParser.parse(agentArgs);
+		String[] packages = Distill.parsePackages(agentArgsMap.get("packages"));
+		if (packages.length > 0) {
+			String[] all = Distill.mergePackages(detectQueryBean.getPackages(), packages);
+			this.ignoreClassHelper = new IgnoreClassHelper(all);
+		} else {
+			// no explicit packages (so use built in ignores)
+			this.ignoreClassHelper = new IgnoreClassHelper(new String[0]);
+		}
 
-    HashMap<String, String> agentArgsMap = ArgParser.parse(agentArgs);
-    String[] packages = Distill.parsePackages(agentArgsMap.get("packages"));
-    if (packages.length > 0) {
-      String[] all = Distill.mergePackages(detectQueryBean.getPackages(), packages);
-      this.ignoreClassHelper = new IgnoreClassHelper(all);
-    } else {
-      // no explicit packages (so use built in ignores)
-      this.ignoreClassHelper = new IgnoreClassHelper(new String[0]);
-    }
+		String debugValue = agentArgsMap.get("debug");
+		if (debugValue != null) {
+			try {
+				logLevel = Integer.parseInt(debugValue.trim());
+			} catch (NumberFormatException e) {
+				System.err.println("QueryBean Agent: debug argument [" + debugValue + "] is not an int? ignoring.");
+			}
+		}
+		if (logLevel > 1) {
+			log(1, "QueryBean Agent: entity bean packages", detectQueryBean.toString());
+			log(1, "DescriptorBean Agent: entity bean packages", detectDescriptorBean.toString());
+			log(1, "QueryBean Agent: application packages", Arrays.toString(packages));
+		}
+	}
 
-    String debugValue = agentArgsMap.get("debug");
-    if (debugValue != null) {
-      try {
-        logLevel = Integer.parseInt(debugValue.trim());
-      } catch (NumberFormatException e) {
-        System.err.println("QueryBean Agent: debug argument [" + debugValue + "] is not an int? ignoring.");
-      }
-    }
-    if (logLevel > 1) {
-      log(1, "QueryBean Agent: entity bean packages", detectQueryBean.toString());
-      log(1, "QueryBean Agent: application packages", Arrays.toString(packages));
-    }
-  }
-
-  /**
-   * Return true if the owner class is a type query bean.
-   * <p>
-   * If true typically means the caller needs to change GETFIELD calls to instead invoke the generated
-   * 'property access' methods.
-   * </p>
-   */
-  public boolean isQueryBean(String owner) {
+	/**
+	 * Return true if the owner class is a type query bean.
+	 * <p>
+	 * If true typically means the caller needs to change GETFIELD calls to instead invoke the generated
+	 * 'property access' methods.
+	 * </p>
+	 */
+	public boolean isQueryBean(String owner) {
 		return detectQueryBean.isQueryBean(owner);
-  }
+	}
+
+	/**
+	 * Return true if the owner class is a type query bean.
+	 * <p>
+	 * If true typically means the caller needs to change GETFIELD calls to instead invoke the generated
+	 * 'property access' methods.
+	 * </p>
+	 */
+	public boolean isDescriptorBean(String owner) {
+		return detectDescriptorBean.isDescriptorBean(owner);
+	}
 
 	/**
 	 * Return true if this class should be ignored. That is JDK classes and
@@ -90,14 +104,14 @@ public class EnhanceContext {
 			logout.println(msg + extra);
 		}
 	}
-	
+
 	public void log(String className, String msg) {
 		if (className != null) {
 			msg = "cls: " + className + "  msg: " + msg;
 		}
 		logout.println("querybean-enhance> " + msg);
 	}
-	
+
 	public boolean isLog(int level){
 		return logLevel >= level;
 	}

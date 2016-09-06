@@ -69,5 +69,5 @@ class DetectQueryBean {
    */
   private boolean isQueryBeanSuffix(String suffix) {
     return (suffix.startsWith("/query/Q") || suffix.startsWith("/query/assoc/Q"));
-  }
+  } 
 }
