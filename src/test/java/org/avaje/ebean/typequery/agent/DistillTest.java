@@ -32,7 +32,7 @@ public class DistillTest {
   @Test
   public void convert() throws Exception {
 
-    DetectQueryBean detectQueryBean = Distill.convert(Arrays.asList("com.foo.domain", "org.z"));
+    DetectQueryBean detectQueryBean = Distill.convertDetectQueryBean(Arrays.asList("com.foo.domain", "org.z"));
     String[] pkgs = detectQueryBean.getPackages();
     assertEquals(pkgs.length, 2);
     assertEquals(pkgs[0], "com/foo/domain/");
@@ -42,7 +42,7 @@ public class DistillTest {
   @Test
   public void convert_when_querySuffix_expect_trim() throws Exception {
 
-    DetectQueryBean detectQueryBean = Distill.convert(Arrays.asList("com.foo.domain.query", "org.z.query"));
+    DetectQueryBean detectQueryBean = Distill.convertDetectQueryBean(Arrays.asList("com.foo.domain.query", "org.z.query"));
     String[] pkgs = detectQueryBean.getPackages();
     assertEquals(pkgs.length, 2);
     assertEquals(pkgs[0], "com/foo/domain/");

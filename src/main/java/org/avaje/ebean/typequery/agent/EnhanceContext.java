@@ -14,7 +14,7 @@ public class EnhanceContext {
 
 	private final DetectQueryBean detectQueryBean;
 	private final DetectDescriptorBean detectDescriptorBean;
-
+	
 	private PrintStream logout;
 
 	private int logLevel;
@@ -25,9 +25,10 @@ public class EnhanceContext {
 	public EnhanceContext(String agentArgs, ClassLoader classLoader, Set<String> initialPackages) {
 		this.logout = System.out;
 		
-		this.detectQueryBean = Distill.convert(AgentManifestReader.read(classLoader, initialPackages));
-		this.detectDescriptorBean = new DetectDescriptorBean(detectQueryBean.getPackages());
-
+		this.detectQueryBean = Distill.convertDetectQueryBean(AgentManifestReader.readQueryMf(classLoader, initialPackages));
+		this.detectDescriptorBean = 
+				Distill.convertDetectDescriptorBean(AgentManifestReader.readDescriptorMf(classLoader, initialPackages));
+		 
 		if (detectQueryBean.isEmpty()) {
 			System.err.println("---------------------------------------------------------------------------------------------");
 			System.err.println("QueryBean Agent: No packages containing query beans - Missing ebean.mf files? this won't work.");
@@ -71,7 +72,7 @@ public class EnhanceContext {
 	}
 
 	/**
-	 * Return true if the owner class is a type query bean.
+	 * Return true if the owner class is a descriptor bean.
 	 * <p>
 	 * If true typically means the caller needs to change GETFIELD calls to instead invoke the generated
 	 * 'property access' methods.
@@ -80,7 +81,7 @@ public class EnhanceContext {
 	public boolean isDescriptorBean(String owner) {
 		return detectDescriptorBean.isDescriptorBean(owner);
 	}
-
+	
 	/**
 	 * Return true if this class should be ignored. That is JDK classes and
 	 * known libraries JDBC drivers etc can be skipped.

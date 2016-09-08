@@ -12,7 +12,7 @@ public class AgentManifestReaderTest {
   @Test
   public void testRead() throws Exception {
 
-    Set<String> packages = AgentManifestReader.read(AgentManifestReaderTest.class.getClassLoader(), null);
+    Set<String> packages = AgentManifestReader.readQueryMf(AgentManifestReaderTest.class.getClassLoader(), null);
 
     assertThat(packages).contains("prototype.domain","one.foo","two.bar","three.baz");
   }
@@ -35,7 +35,7 @@ public class AgentManifestReaderTest {
     Set<String> packages = manifestReader.getPackages();
     assertThat(packages).contains("other.one");
 
-    Set<String> allPackages = AgentManifestReader.read(AgentManifestReaderTest.class.getClassLoader(), packages);
+    Set<String> allPackages = AgentManifestReader.readQueryMf(AgentManifestReaderTest.class.getClassLoader(), packages);
 
     assertThat(allPackages).contains("prototype.domain","one.foo","two.bar","three.baz","other.one");
   }
