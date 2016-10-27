@@ -4,7 +4,6 @@ import org.avaje.ebean.typequery.agent.asm.CLAwareClassWriter;
 import org.avaje.ebean.typequery.agent.asm.ClassReader;
 import org.avaje.ebean.typequery.agent.asm.ClassWriter;
 
-import java.io.PrintStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -18,6 +17,8 @@ import java.util.Set;
  * </p>
  */
 public class QueryBeanTransformer implements ClassFileTransformer {
+
+  private static final int FLAGS = ClassWriter.COMPUTE_FRAMES + ClassWriter.COMPUTE_MAXS;
 
   public static void premain(String agentArgs, Instrumentation inst) {
 
@@ -52,8 +53,8 @@ public class QueryBeanTransformer implements ClassFileTransformer {
   /**
    * Change the logout to something other than system out.
    */
-  public void setLogout(PrintStream logout) {
-    this.enhanceContext.setLogout(logout);
+  public void setMessageListener(MessageListener messageListener) {
+    this.enhanceContext.setMessageListener(messageListener);
   }
 
   public void log(int level, String msg, String extra) {
@@ -81,12 +82,6 @@ public class QueryBeanTransformer implements ClassFileTransformer {
       // the class is an interface
       log(8, "No Enhancement required ",  e.getMessage());
       return null;
-
-    } catch (Exception e) {
-      // a safety net for unexpected errors
-      // in the transformation
-      enhanceContext.log(e);
-      return null;
     }
   }
 
@@ -96,7 +91,7 @@ public class QueryBeanTransformer implements ClassFileTransformer {
   private byte[] enhancement(ClassLoader classLoader, byte[] classfileBuffer) {
 
     ClassReader cr = new ClassReader(classfileBuffer);
-    CLAwareClassWriter cw = new CLAwareClassWriter(ClassWriter.COMPUTE_FRAMES + ClassWriter.COMPUTE_MAXS, classLoader);
+    CLAwareClassWriter cw = new CLAwareClassWriter(FLAGS, classLoader);
     TypeQueryClassAdapter ca = new TypeQueryClassAdapter(cw, enhanceContext);
 
     try {
