@@ -1675,6 +1675,13 @@ public class ClassWriter extends ClassVisitor {
      *         classes.
      */
     protected String getCommonSuperClass(final String type1, final String type2) {
+        return getCommonSuperClassBase(type1, type2);
+    }
+
+    /**
+     * rbygrave: extract to control error logging.
+     */
+    protected String getCommonSuperClassBase(final String type1, final String type2) {
         Class<?> c, d;
         try {
             c = classForName(type1.replace('/', '.'));

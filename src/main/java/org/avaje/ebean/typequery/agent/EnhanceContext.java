@@ -14,7 +14,7 @@ public class EnhanceContext {
 
 	private final DetectQueryBean detectQueryBean;
 
-	private PrintStream logout;
+	private MessageListener messageListener;
 
 	private int logLevel;
 
@@ -23,7 +23,7 @@ public class EnhanceContext {
 	 */
 	public EnhanceContext(String agentArgs, ClassLoader classLoader, Set<String> initialPackages) {
 
-    this.logout = System.out;
+    this.messageListener = new DefaultMessageListener();
 
     this.detectQueryBean = Distill.convert(AgentManifestReader.read(classLoader, initialPackages));
     if (detectQueryBean.isEmpty()) {
@@ -76,10 +76,10 @@ public class EnhanceContext {
 	}
 
 	/**
-	 * Change the logout to something other than system out.
+	 * Change the message listener.
 	 */
-	public void setLogout(PrintStream logout) {
-		this.logout = logout;
+	void setMessageListener(MessageListener messageListener) {
+		this.messageListener = messageListener;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class EnhanceContext {
 	 */
 	public void log(int level, String msg, String extra) {
 		if (logLevel >= level) {
-			logout.println(msg + extra);
+			messageListener.debug(msg + extra);
 		}
 	}
 	
@@ -95,18 +95,11 @@ public class EnhanceContext {
 		if (className != null) {
 			msg = "cls: " + className + "  msg: " + msg;
 		}
-		logout.println("querybean-enhance> " + msg);
+		messageListener.debug("querybean-enhance> " + msg);
 	}
 	
 	public boolean isLog(int level){
 		return logLevel >= level;
-	}
-
-	/**
-	 * Log an error.
-	 */
-	public void log(Throwable e) {
-		e.printStackTrace(logout);
 	}
 
 	/**
@@ -116,4 +109,17 @@ public class EnhanceContext {
 		return logLevel;
 	}
 
+	private static class DefaultMessageListener implements MessageListener {
+
+		private final PrintStream out = System.out;
+
+		DefaultMessageListener() {
+		}
+
+		@Override
+		public void debug(String message) {
+			out.println(message);
+		}
+
+	}
 }
