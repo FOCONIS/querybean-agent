@@ -4,7 +4,7 @@
 
   <groupId>org.avaje.ebean</groupId>
   <artifactId>querybean-agent</artifactId>
-  <version>8.1.4-SNAPSHOT</version>
+  <version>8.2.1-SNAPSHOT</version>
 
   <parent>
     <groupId>org.avaje</groupId>
