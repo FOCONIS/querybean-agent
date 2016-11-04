@@ -7,7 +7,7 @@ package org.avaje.ebean.typequery.agent.asm;
  */
 public class CLAwareClassWriter extends ClassWriter {
 
-  protected final ClassLoader classLoader;
+  private final ClassLoader classLoader;
 
   /**
    * Construct with flags and a ClassLoader which is used for supporting the getCommonSuperClass() method.
@@ -17,17 +17,21 @@ public class CLAwareClassWriter extends ClassWriter {
     this.classLoader = classLoader;
   }
 
+  @Override
+  protected String getCommonSuperClass(String type1, String type2) {
+    try {
+      return getCommonSuperClassBase(type1, type2);
+    } catch (Throwable e) {
+      throw new RuntimeException("Error getting common superClass for " + type1 + " and " + type2 + " - " + e.getMessage(), e);
+    }
+  }
+
   /**
    * Return the class using the supplied ClassLoader.
    */
   @Override
   protected Class<?> classForName(String name) throws ClassNotFoundException {
-    try {
-      return Class.forName(name, false, classLoader); 
-    } catch (Throwable e) {
-      // ignore and just use Class.forName original behavior
-      return super.classForName(name);
-    }    
+    return Class.forName(name, false, classLoader);
   }
 
 }
