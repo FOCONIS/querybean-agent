@@ -22,14 +22,14 @@
     <dependency>
       <groupId>io.ebean</groupId>
       <artifactId>ebean-querybean</artifactId>
-      <version>10.1.1-SNAPSHOT</version>
+      <version>10.1.1</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>io.ebean</groupId>
       <artifactId>ebean</artifactId>
-      <version>10.1.1-SNAPSHOT</version>
+      <version>10.1.1</version>
       <scope>test</scope>
     </dependency>
 
