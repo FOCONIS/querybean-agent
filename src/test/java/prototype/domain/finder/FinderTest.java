@@ -1,6 +1,6 @@
 package prototype.domain.finder;
 
-import org.avaje.ebean.typequery.agent.BaseTest;
+import io.ebean.typequery.agent.BaseTest;
 import org.junit.Test;
 import prototype.domain.query.QAddress;
 import prototype.domain.query.QOrder;

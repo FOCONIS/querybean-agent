@@ -1,8 +1,6 @@
 package prototype.domain;
 
-import com.avaje.ebean.Model;
-import com.avaje.ebean.annotation.CreatedTimestamp;
-import com.avaje.ebean.annotation.UpdatedTimestamp;
+import io.ebean.Model;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;

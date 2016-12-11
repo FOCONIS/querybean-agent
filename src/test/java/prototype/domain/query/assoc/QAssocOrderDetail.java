@@ -1,11 +1,11 @@
 package prototype.domain.query.assoc;
 
-import org.avaje.ebean.typequery.PDouble;
-import org.avaje.ebean.typequery.PInteger;
-import org.avaje.ebean.typequery.PLong;
-import org.avaje.ebean.typequery.PTimestamp;
-import org.avaje.ebean.typequery.TQAssocBean;
-import org.avaje.ebean.typequery.TypeQueryBean;
+import io.ebean.typequery.PDouble;
+import io.ebean.typequery.PInteger;
+import io.ebean.typequery.PLong;
+import io.ebean.typequery.PTimestamp;
+import io.ebean.typequery.TQAssocBean;
+import io.ebean.typequery.TypeQueryBean;
 import prototype.domain.OrderDetail;
 
 @TypeQueryBean
