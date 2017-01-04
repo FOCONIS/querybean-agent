@@ -1,4 +1,4 @@
-package org.avaje.ebean.typequery.agent;
+package io.ebean.typequery.agent;
 
 import java.util.Arrays;
 
