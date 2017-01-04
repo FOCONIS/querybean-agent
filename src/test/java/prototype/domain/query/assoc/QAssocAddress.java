@@ -1,10 +1,10 @@
 package prototype.domain.query.assoc;
 
-import org.avaje.ebean.typequery.PLong;
-import org.avaje.ebean.typequery.PString;
-import org.avaje.ebean.typequery.PTimestamp;
-import org.avaje.ebean.typequery.TQAssocBean;
-import org.avaje.ebean.typequery.TypeQueryBean;
+import io.ebean.typequery.PLong;
+import io.ebean.typequery.PString;
+import io.ebean.typequery.PTimestamp;
+import io.ebean.typequery.TQAssocBean;
+import io.ebean.typequery.TypeQueryBean;
 import prototype.domain.Address;
 
 @TypeQueryBean

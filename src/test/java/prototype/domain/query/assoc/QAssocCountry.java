@@ -1,8 +1,8 @@
 package prototype.domain.query.assoc;
 
-import org.avaje.ebean.typequery.PString;
-import org.avaje.ebean.typequery.TQAssocBean;
-import org.avaje.ebean.typequery.TypeQueryBean;
+import io.ebean.typequery.PString;
+import io.ebean.typequery.TQAssocBean;
+import io.ebean.typequery.TypeQueryBean;
 import prototype.domain.Country;
 
 @TypeQueryBean

@@ -1,11 +1,11 @@
 package prototype.domain.query;
 
-import org.avaje.ebean.typequery.PEnum;
-import org.avaje.ebean.typequery.PLong;
-import org.avaje.ebean.typequery.PSqlDate;
-import org.avaje.ebean.typequery.PTimestamp;
-import org.avaje.ebean.typequery.TQRootBean;
-import org.avaje.ebean.typequery.TypeQueryBean;
+import io.ebean.typequery.PEnum;
+import io.ebean.typequery.PLong;
+import io.ebean.typequery.PSqlDate;
+import io.ebean.typequery.PTimestamp;
+import io.ebean.typequery.TQRootBean;
+import io.ebean.typequery.TypeQueryBean;
 import prototype.domain.Order;
 import prototype.domain.query.assoc.QAssocAddress;
 import prototype.domain.query.assoc.QAssocOrderDetail;

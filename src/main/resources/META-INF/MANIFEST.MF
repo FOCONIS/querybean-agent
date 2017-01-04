@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Premain-Class: org.avaje.ebean.typequery.agent.QueryBeanTransformer
-Agent-Class: org.avaje.ebean.typequery.agent.QueryBeanTransformer
+Premain-Class: io.ebean.typequery.agent.QueryBeanTransformer
+Agent-Class: io.ebean.typequery.agent.QueryBeanTransformer
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
