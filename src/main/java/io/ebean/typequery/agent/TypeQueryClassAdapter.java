@@ -86,6 +86,12 @@ public class TypeQueryClassAdapter extends ClassVisitor implements Constants {
   public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 
     if (classInfo.isTypeQueryBean()) {
+      if ((access & Opcodes.ACC_STATIC) != 0) {
+        if (isLog(5)) {
+          log("ignore static methods on type query bean " +name + " " + desc);
+        }
+        return super.visitMethod(access, name, desc, signature, exceptions);
+      }
       if (classInfo.addMarkerAnnotation()) {
         addMarkerAnnotation();
       }

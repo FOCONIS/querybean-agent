@@ -106,7 +106,9 @@ public class ClassInfo implements Constants {
       if (fields == null) {
         fields = new ArrayList<>();
       }
-      fields.add(new FieldInfo(this, name, desc, signature));
+      if ((access & Opcodes.ACC_STATIC) == 0) {
+        fields.add(new FieldInfo(this, name, desc, signature));
+      }
     }
   }
 
