@@ -6,17 +6,6 @@ package io.ebean.typequery.agent;
 public interface Constants {
 
   /**
-   * Entity beans can be ignored for this enhancement.
-   */
-  String C_ENTITYBEAN = "io/ebean/bean/EntityBean";
-
-  String ENTITY_ANNOTATION = "Ljavax/persistence/Entity;";
-
-  String EMBEDDABLE_ANNOTATION = "Ljavax/persistence/Embeddable;";
-
-  String MAPPEDSUPERCLASS_ANNOTATION = "Ljavax/persistence/MappedSuperclass;";
-
-  /**
    * Annotation used to mark beans that are already enhanced.
    */
   String ANNOTATION_ALREADY_ENHANCED_MARKER = "Lio/ebean/typequery/AlreadyEnhancedMarker;";

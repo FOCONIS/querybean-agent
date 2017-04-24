@@ -13,17 +13,6 @@ import java.util.Set;
  */
 public class ClassInfo implements Constants {
 
-  /**
-   * Detect entity beans as we will ignore them for this enhancement.
-   */
-  static Set<String> entityBeanAnnotations = new HashSet<>();
-  static {
-    entityBeanAnnotations.add(ENTITY_ANNOTATION);
-    entityBeanAnnotations.add(EMBEDDABLE_ANNOTATION);
-    entityBeanAnnotations.add(MAPPEDSUPERCLASS_ANNOTATION);
-  }
-
-
   private final EnhanceContext enhanceContext;
 
   private final String className;
@@ -87,9 +76,6 @@ public class ClassInfo implements Constants {
    * Check for the type query bean and type query user annotations.
    */
   public void checkTypeQueryAnnotation(String desc) {
-    if (isEntityBeanAnnotation(desc)) {
-      throw new NoEnhancementRequiredException("Not enhancing entity bean");
-    }
     if (isTypeQueryBeanAnnotation(desc)) {
       typeQueryBean = true;
     } else if (isAlreadyEnhancedAnnotation(desc)) {
@@ -124,13 +110,6 @@ public class ClassInfo implements Constants {
    */
   private boolean isTypeQueryBeanAnnotation(String desc) {
     return ANNOTATION_TYPE_QUERY_BEAN.equals(desc);
-  }
-
-  /**
-   * Return true if this is one of the entity bean annotations.
-   */
-  private boolean isEntityBeanAnnotation(String desc) {
-    return entityBeanAnnotations.contains(desc);
   }
 
   /**
